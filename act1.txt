@@ -39,6 +39,5 @@ if run
     if flip-flops (will fall if he tries to run away from Cthulhu, maybe be able to throw them?)
     if boots (no affect)
     if sneakers (he can run faster) 
-
-  
+END OF ACT 1
 	
