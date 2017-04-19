@@ -16,8 +16,8 @@ import java.util.Stack;
 public class Intro extends Application {
 	private TextField input;
 	private Text info;
-	private Stack<File> story;
-	private Stack<String> cond;
+	private Stack<File> storyA,storyB;
+	private Stack<String> condA,condB;
 	private TextFlow layout;
 	public static void main(String[] args) {
 		// TODO Everything
@@ -27,25 +27,39 @@ public class Intro extends Application {
 
 	@Override
 	public void start(Stage primaryStage) throws FileNotFoundException{
-		//make a new stack of story
-		story = new Stack<File>();
-		story.push(new File("act3.txt"));
-		story.push(new File("act2.txt"));
-		story.push(new File("act1.txt"));
+		//make a new stack of story and conditions
+		storyA = new Stack<File>();
+		storyB = new Stack<File>();
+		condA = new Stack<String>();
+		condB = new Stack<String>();
 		
-		//stacks of conditions to advance the story
-		cond = new Stack<String>();
-		cond.push("cthulhu");
-		cond.push("test");
-		cond.push("cat");
+		//push story route a to the story and condition stacks
+		storyA.push(new File("act1 a4.txt"));
+		storyA.push(new File("act1 a3.txt"));
+		storyA.push(new File("act1 a2.txt"));
+		storyA.push(new File("act1 a1.txt"));
+		condA.push("flip-flops");
+		condA.push("short");
+		condA.push("bagel");
+		condA.push("breakfast");
+		
+		//do the same for route b
+		storyB.push(new File("act1 b4.txt"));
+		storyB.push(new File("act1 b3.txt"));
+		storyB.push(new File("act1 b2.txt"));
+		storyB.push(new File("act1 b1.txt"));
+		condB.push("sneakers");
+		condB.push("long");
+		condB.push("bacon and eggs");
+		condB.push("run");
 		
 		//make a new pane to hold all of the wonderful items
 		GridPane pane = new GridPane();
 
 		
 		//makes a text box and input field
-		info = new Text("Welcome to *please add game name here*\nType cat and press [ENTER] to begin"); //TODO Add name of game
-		info.setFont(Font.font("Comic Sans MS", 20));//TODO Maybe dont use comic sans
+		info = new Text("You woke upand crawled out of bed, it's 7:00, you have 90 minutes to get to class. You have time to either get breakfast or go for a short run before getting ready for school, which do you do?"); 
+		info.setFont(Font.font("Times New Roman", 20));//Now with 100% less comic sans
 		input = new TextField();
 		layout = new TextFlow(info);
 		
@@ -98,33 +112,78 @@ public class Intro extends Application {
 		 * 
 		 */
 		
-		if(s.equals(cond.peek())){
-			//info.setText("");
-			try{//i'm using a try statement to actually handle the errors here, because it would just push them up to the start method
-				//and i don't want to deal with them there
+		//inserts the user input in a different font
+		Text in = new Text("\n"+s);
+		in.setFont(Font.font("Arial",18));
+		layout.getChildren().add(in);
+		
+		//all this is in a try statement to catch FileNoFound exception so it isnt passed back up
+		try {
+			if (s.equals(condA.peek())) {//checks if the first condition was entered
+				
+				//creates a new text object and sets the font
 				Text next = new Text("\n");
-				next.setFont(Font.font("Comic Sans MS",20));
-				Scanner read = new Scanner(story.pop());
-				while(read.hasNext()){
+				next.setFont(Font.font("Times New Roman", 20));
+				
+				//creates a scanner object to read from the next story input
+				Scanner read = new Scanner(storyA.pop());
+				//pops off other story stack, since it is not needed
+				storyB.pop();
+				
+				//reads all input and adds it to the text object
+				while (read.hasNext()) {
+					next.setText(next.getText() + read.nextLine());
+				}
+				
+				//adds the text object to the form
+				layout.getChildren().add(next);
+				if(condA.size()==3){//if next needs to skipped do this
+					condA.pop();
+					condB.pop();
+					storyA.pop();
+					storyB.pop();
+				}
+				
+				//pop off the condition for each
+				condA.pop();
+				condB.pop();
+				
+				//close the scanner
+				read.close();
+			}else if(s.equals(condB.peek())){
+				//assume all the comments here are the exact same as above. its basically the same code
+				Text next = new Text("\n");
+				next.setFont(Font.font("Times New Roman", 20));
+				Scanner read = new Scanner(storyB.pop());
+				storyA.pop();
+				while (read.hasNext()) {
 					next.setText(next.getText() + read.nextLine());
 				}
 				layout.getChildren().add(next);
-				cond.pop();
+				if(condB.size()==4){
+					condA.pop();
+					condB.pop();
+					storyA.pop();
+					storyB.pop();
+				}
+				condA.pop();
+				condB.pop();
 				read.close();
 				
-			} catch (FileNotFoundException e) {
-				System.out.println("Something and/or everything broke. Oops.");
+			} else {
+				//if the input doesnt match a possibility it gives an error 
+				Text next = new Text("\nThat won't help.");
+				next.setFont(Font.font("Times New Roman", 20));
+				layout.getChildren().add(next);
+
 			}
-			
-			
-		}else{
-			Text next = new Text("\nThat won't help.");
-			next.setFont(Font.font("Comic Sans MS",20));
-			layout.getChildren().add(next);
-			
-		}
-		if(layout.getHeight()>391){
-			layout.getChildren().remove(0);
+			while (layout.getHeight() > 391) {
+				//if the text is off screen remove stuff until it isnt
+				layout.getChildren().remove(0);
+			}
+		} catch (FileNotFoundException e) {
+			//this shouldnt happen ever.
+			System.out.println("Several things broke. Tell Justin to fix it.");
 		}
 	}
 }
