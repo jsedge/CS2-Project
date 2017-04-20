@@ -1,1 +1,31 @@
-Congrats I'll decide the thing that gets to act 2 later but you're here!
+Act 2: Electric boogaloo 
+
+Owen descends his steps and begins his journey to school! 
+
+Does he go left or right? 
+
+if left (-10 mins){
+  Owen makes his way down the left side of the street, all is calm, its a nice sunny day outside!
+  he reaches a fork in the road. Left or right?{ 
+  
+  if left (-5 mins)
+      Owen goes left and turns onto the next street he feels as if he might actually make it to class on time today! 
+      proceed to final turn
+      
+  if right (-15 minutes)
+    Owen proceeds down the right side of the road, he gets lost after 5 minutes and turns around and takes the left path instead
+    he starts hurrying, he doesn't want to be late again ! proceed to final turn
+   }
+ }
+    
+if right (-25 mintues){
+  Owen goes down the right side of the street, and finds that construction has the street closed at the bottom where he needs to go.
+  He doubles back, going left from his house
+  
+  proceed to fork in the road from left branch
+ }
+
+//maybe add one more choice? 
+
+ END OF ACT 2
+ 
