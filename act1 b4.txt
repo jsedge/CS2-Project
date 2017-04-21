@@ -1,3 +1,4 @@
 You put on your sneakers and run out the door.
 
 END ACT I
+Press [ENTER] to continue.

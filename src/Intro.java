@@ -16,8 +16,10 @@ import java.util.Stack;
 public class Intro extends Application {
 	private TextField input;
 	private Text info;
+	private int time,pridePC,prideC;
 	private Stack<File> storyA,storyB;
 	private Stack<String> condA,condB;
+	private Stack<Integer> timeA,timeB;
 	private TextFlow layout;
 	public static void main(String[] args) {
 		// TODO Everything
@@ -27,27 +29,50 @@ public class Intro extends Application {
 
 	@Override
 	public void start(Stage primaryStage) throws FileNotFoundException{
+		//Initialise time remaining
+		time = 90;
+		pridePC = 100;
+		prideC = 100;
+		
 		//make a new stack of story and conditions
 		storyA = new Stack<File>();
 		storyB = new Stack<File>();
 		condA = new Stack<String>();
 		condB = new Stack<String>();
+		timeA = new Stack<Integer>();
+		timeB = new Stack<Integer>();
 		
 		//push story route a to the story and condition stacks
+		storyA.push(new File("act3.txt"));
+		storyA.push(new File("act2 a2.txt"));
+		storyA.push(new File("act2 a1.txt"));
+		storyA.push(new File("act2 intro.txt"));
 		storyA.push(new File("act1 a4.txt"));
 		storyA.push(new File("act1 a3.txt"));
 		storyA.push(new File("act1 a2.txt"));
 		storyA.push(new File("act1 a1.txt"));
+		condA.push("");
+		condA.push("left");
+		condA.push("left");
+		condA.push("");
 		condA.push("flip-flops");
 		condA.push("short");
 		condA.push("bagel");
 		condA.push("breakfast");
 		
 		//do the same for route b
+		storyB.push(new File("act3.txt"));
+		storyB.push(new File("act2 b2.txt"));
+		storyB.push(new File("act2 b1.txt"));
+		storyB.push(new File("act2 intro.txt"));
 		storyB.push(new File("act1 b4.txt"));
 		storyB.push(new File("act1 b3.txt"));
 		storyB.push(new File("act1 b2.txt"));
 		storyB.push(new File("act1 b1.txt"));
+		condB.push("");
+		condB.push("right");
+		condB.push("right");
+		condB.push("");
 		condB.push("sneakers");
 		condB.push("long");
 		condB.push("bacon and eggs");
@@ -58,7 +83,7 @@ public class Intro extends Application {
 
 		
 		//makes a text box and input field
-		info = new Text("You woke upand crawled out of bed, it's 7:00, you have 90 minutes to get to class. You have time to either get breakfast or go for a short run before getting ready for school, which do you do?"); 
+		info = new Text("You woke up and crawl out of bed, it's 7:00, you have 90 minutes to get to class. You have time to either get breakfast or go for a short run before getting ready for school, which do you do?"); 
 		info.setFont(Font.font("Times New Roman", 20));//Now with 100% less comic sans
 		input = new TextField();
 		layout = new TextFlow(info);
@@ -71,7 +96,7 @@ public class Intro extends Application {
 		
 
 		//make a new scene 
-		Scene scene = new Scene(pane,600,450);
+		Scene scene = new Scene(pane,600,600);
 		
 		//make an event for button presses
 		scene.setOnKeyPressed(this::buttonPress);
@@ -113,13 +138,62 @@ public class Intro extends Application {
 		 */
 		
 		//inserts the user input in a different font
-		Text in = new Text("\n"+s);
+		Text in = new Text("\n>"+s);
 		in.setFont(Font.font("Arial",18));
 		layout.getChildren().add(in);
 		
-		//all this is in a try statement to catch FileNoFound exception so it isnt passed back up
+		//all this is in a try statement to catch FileNotFound exception so it isnt passed back up
 		try {
-			if (s.equals(condA.peek())) {//checks if the first condition was entered
+			if(storyA.isEmpty()){
+				layout.getChildren().remove(0, layout.getChildren().size());
+				Text header = new Text("Rap Battle!\nYour Pride: " + pridePC + "\n\tCthluhu's Pride: " + prideC);
+				layout.getChildren().add(header);
+				
+				int dealt,taken;
+				taken = (int)(Math.random()*15+5);
+				dealt = (int)(Math.log(s.length())*((Math.random()*3+4)));
+				prideC-=dealt;
+				pridePC-=taken;
+				
+				Text you = new Text("\nYou said: " + s + "\nWhich took away " + dealt + " of Cthulhu's pride\nCthulhu's Pride: " + prideC);
+				you.setFont(Font.font(18));
+				layout.getChildren().add(you);
+				if(prideC<=0){
+					Text gg = new Text("You are victorious in the Eldritch Rap Battle");
+					gg.setFont(Font.font(18));
+					layout.getChildren().add(gg);
+				}else{
+
+					Text cthulhu = new Text("\nCthulhu: " + "\nYou lost " + taken + " pride\nYour remaining pride: " + pridePC);
+					cthulhu.setFont(Font.font(18));
+					layout.getChildren().add(cthulhu);
+
+					if(pridePC<=0){
+						Text gg = new Text("You lost.");
+						gg.setFont(Font.font(18));
+						layout.getChildren().add(gg);
+					}
+				}
+			}else if(s.equals(condB.peek())){
+				//assume all the comments here are the exact same as above. its basically the same code
+				Text next = new Text("\n");
+				next.setFont(Font.font("Times New Roman", 20));
+				Scanner read = new Scanner(storyB.pop());
+				storyA.pop();
+				while (read.hasNext()) {
+					next.setText(next.getText() + read.nextLine());
+				}
+				layout.getChildren().add(next);
+				if(condB.size()==8){
+					condA.pop();
+					condB.pop();
+					storyA.pop();
+					storyB.pop();
+				}
+				condA.pop();
+				condB.pop();
+				read.close();
+			}else if (s.equals(condA.peek())) {//checks if the first condition was entered
 				
 				//creates a new text object and sets the font
 				Text next = new Text("\n");
@@ -137,7 +211,7 @@ public class Intro extends Application {
 				
 				//adds the text object to the form
 				layout.getChildren().add(next);
-				if(condA.size()==3){//if next needs to skipped do this
+				if(condA.size()==7){//if next needs to skipped do this
 					condA.pop();
 					condB.pop();
 					storyA.pop();
@@ -150,36 +224,20 @@ public class Intro extends Application {
 				
 				//close the scanner
 				read.close();
-			}else if(s.equals(condB.peek())){
-				//assume all the comments here are the exact same as above. its basically the same code
-				Text next = new Text("\n");
-				next.setFont(Font.font("Times New Roman", 20));
-				Scanner read = new Scanner(storyB.pop());
-				storyA.pop();
-				while (read.hasNext()) {
-					next.setText(next.getText() + read.nextLine());
-				}
-				layout.getChildren().add(next);
-				if(condB.size()==4){
-					condA.pop();
-					condB.pop();
-					storyA.pop();
-					storyB.pop();
-				}
-				condA.pop();
-				condB.pop();
-				read.close();
-				
+			
+			
 			} else {
 				//if the input doesnt match a possibility it gives an error 
-				Text next = new Text("\nThat won't help.");
+				Text next = new Text("\nThat's not an option.\nYour options are " + condA.peek() + " or " + condB.peek());
 				next.setFont(Font.font("Times New Roman", 20));
 				layout.getChildren().add(next);
 
 			}
 			while (layout.getHeight() > 391) {
 				//if the text is off screen remove stuff until it isnt
+				layout.autosize();
 				layout.getChildren().remove(0);
+				
 			}
 		} catch (FileNotFoundException e) {
 			//this shouldnt happen ever.
