@@ -196,7 +196,7 @@ public class Intro extends Application {
 					routeB.getTop();
 				}
 				player.loseTime(routeB.getTime());
-				routeB.getTime();
+				routeA.getTime();
 				time.setText("Time Remaining: " + player.getTime());
 				read.close();
 			}else if (routeA.isCond(s)) {//checks if the first condition was entered
@@ -220,8 +220,12 @@ public class Intro extends Application {
 				if(routeA.checkProg(7)){//if next needs to skipped do this
 					routeB.getTop();
 					routeA.getTop();
+					routeB.getTime();
+					routeA.getTime();
 				}
-								
+				player.loseTime(routeA.getTime());
+				routeB.getTime();
+				time.setText("Time Remaining: " + player.getTime());			
 				//close the scanner
 				read.close();
 			
