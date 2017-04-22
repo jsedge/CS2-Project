@@ -28,4 +28,8 @@ public class Player {
 	public int getPride(){
 		return pride;
 	}
+	
+	public int getTime(){
+		return time;
+	}
 }

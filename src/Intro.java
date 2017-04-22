@@ -11,13 +11,12 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import java.io.*;
 import java.util.Scanner;
-import java.util.Stack;
 
 public class Intro extends Application {
 	private TextField input;
 	private Text info;
 	private Story routeA, routeB;
-	private Label armWrestle;
+	private Label armWrestle,time;
 	private TextFlow layout;
 	private ProgressBar hp;
 	private boolean finalFight;
@@ -37,7 +36,8 @@ public class Intro extends Application {
 		finalFight = false;
 		hp = new ProgressBar();
 		routeA = new Story(0);
-		routeB = new Story(1);		
+		routeB = new Story(1);	
+		time = new Label("Time Remaining: 90");
 		
 		
 		//make a new pane to hold all of the wonderful items
@@ -49,6 +49,7 @@ public class Intro extends Application {
 		info.setFont(Font.font("Times New Roman", 20));//Now with 100% less comic sans
 		input = new TextField();
 		layout = new TextFlow(info);
+		layout.setMaxWidth(600);
 		
 		armWrestle = new Label("Progress on arm wrestle: ");
 		armWrestle.setVisible(false);
@@ -58,11 +59,12 @@ public class Intro extends Application {
 		pane.add(input, 0, 1);
 		pane.add(armWrestle, 0, 2);
 		pane.add(hp, 0, 3);
+		pane.add(time, 1, 0);
 		hp.setVisible(false);
 		
 
 		//make a new scene 
-		Scene scene = new Scene(pane,600,600);
+		Scene scene = new Scene(pane,800,600);
 		
 		//make an event for button presses
 		scene.setOnKeyPressed(this::buttonPress);
@@ -122,6 +124,12 @@ public class Intro extends Application {
 		
 		//all this is in a try statement to catch FileNotFound exception so it isnt passed back up
 		try {
+			while (layout.getHeight() > 370) {
+				//if the text is off screen remove stuff until it isnt
+				layout.autosize();
+				layout.getChildren().remove(0);
+				
+			}
 			if(routeA.isOver()){
 				layout.getChildren().remove(0, layout.getChildren().size());
 				Text header = new Text("Rap Battle!\nYour Pride: " + player.getPride() + "\nCthluhu's Pride: " + highPriest.getPride());
@@ -178,6 +186,7 @@ public class Intro extends Application {
 					next.setText(next.getText() + read.nextLine());
 				}
 				layout.getChildren().add(next);
+				
 				if(routeB.checkProg(8)){
 					routeA.getTop();
 					routeB.getTop();
@@ -188,6 +197,7 @@ public class Intro extends Application {
 				}
 				player.loseTime(routeB.getTime());
 				routeB.getTime();
+				time.setText("Time Remaining: " + player.getTime());
 				read.close();
 			}else if (routeA.isCond(s)) {//checks if the first condition was entered
 				
@@ -223,12 +233,7 @@ public class Intro extends Application {
 				layout.getChildren().add(next);
 
 			}
-			while (layout.getHeight() > 391) {
-				//if the text is off screen remove stuff until it isnt
-				layout.autosize();
-				layout.getChildren().remove(0);
-				
-			}
+		
 		} catch (FileNotFoundException e) {
 			//this shouldnt happen ever.
 			System.out.println("Several things broke. Tell Justin to fix it.");

@@ -27,6 +27,14 @@ public class Story {
 			cond.push("short");
 			cond.push("bagel");
 			cond.push("breakfast");
+			time.push(0);
+			time.push(5);
+			time.push(10);
+			time.push(0);
+			time.push(0);
+			time.push(10);
+			time.push(15);
+			time.push(0);
 		}else{
 			//do the same for route b
 			story.push(new File("act3.txt"));
@@ -45,6 +53,14 @@ public class Story {
 			cond.push("long");
 			cond.push("bacon and eggs");
 			cond.push("run");
+			time.push(0);
+			time.push(15);
+			time.push(25);
+			time.push(0);
+			time.push(0);
+			time.push(10);
+			time.push(30);
+			time.push(0);
 		}
 	}
 	
