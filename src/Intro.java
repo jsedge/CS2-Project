@@ -19,7 +19,7 @@ public class Intro extends Application {
 	private Label armWrestle,time;
 	private TextFlow layout;
 	private ProgressBar hp;
-	private boolean finalFight;
+	private boolean finalFight, gameComplete;
 	private Cthulhu highPriest;
 	private Player player;
  	public static void main(String[] args) {
@@ -81,15 +81,17 @@ public class Intro extends Application {
 
 	public void buttonPress(KeyEvent e) {
 		if(e.getCode().equals(KeyCode.ENTER)){
+
 			//checks if the given input was the enter key
 			//gets text from text box as string
 			String s = input.getText();
-			
+
 			//clears text box
 			input.setText("");
-			
+
 			//passes string to another method to handle it
 			handleInput(s);
+
 		}else if(finalFight){
 			Text finalBoss = new Text("Cthulhu does not admit defeat. Quickly tap [LEFT] and [RIGHT] to beat him in an arm wrestle.");
 			finalBoss.setFont(Font.font(18));
@@ -108,6 +110,8 @@ public class Intro extends Application {
 					victory.setText(victory.getText() + "\nYou suddenly wake up and realize you were dreaming the entire time.");
 					victory.setText(victory.getText() + "\nYou look down to your phone and notice it's 9:47 and class already started.");
 					victory.setText(victory.getText() + "\nCthulhu laughs at you from across the table as he holds his #1 Rap Battle Master Trophy");
+					victory.setText(victory.getText() + "\nPress [ENTER] to continue");
+					gameComplete = true;
 					victory.setFont(Font.font(18));
 					layout.getChildren().add(victory);
 				}
@@ -129,6 +133,18 @@ public class Intro extends Application {
 				layout.autosize();
 				layout.getChildren().remove(0);
 				
+			}
+			if(gameComplete){
+				File credits = new File("credits.txt");
+				layout.getChildren().remove(0, layout.getChildren().size());
+				Scanner reader = new Scanner(credits);
+				
+				while(reader.hasNext()){
+					Text cur = new Text(reader.nextLine() + "\n\n");
+					layout.getChildren().add(cur);
+					
+					
+				}
 			}
 			if(routeA.isOver()){
 				layout.getChildren().remove(0, layout.getChildren().size());
@@ -195,6 +211,7 @@ public class Intro extends Application {
 					routeA.getTop();
 					routeB.getTop();
 				}
+				
 				player.loseTime(routeB.getTime());
 				routeA.getTime();
 				time.setText("Time Remaining: " + player.getTime());
@@ -223,6 +240,7 @@ public class Intro extends Application {
 					routeB.getTime();
 					routeA.getTime();
 				}
+				
 				player.loseTime(routeA.getTime());
 				routeB.getTime();
 				time.setText("Time Remaining: " + player.getTime());			
@@ -239,7 +257,7 @@ public class Intro extends Application {
 			}
 		
 		} catch (FileNotFoundException e) {
-			//this shouldnt happen ever.
+			//this shouldn't happen ever.
 			System.out.println("Several things broke. Tell Justin to fix it.");
 		}
 	}
