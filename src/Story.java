@@ -4,11 +4,13 @@ public class Story {
 	private Stack<File> story;
 	private Stack<String> cond;
 	private Stack<Integer> time;
+	int speed;
 	
 	public Story(int a){
 		story = new Stack<File>();
 		cond = new Stack<String>();
 		time = new Stack<Integer>();
+		speed=1;
 		if(a==0){
 			//push story route a to the story and condition stacks
 			story.push(new File("act3.txt"));
@@ -81,11 +83,14 @@ public class Story {
 		return x==cond.size()+1;
 	}
 	
+	public void beFast(){
+		speed=2;
+	}
 	public String peek(){
 		return cond.peek();
 	}
 	
 	public int getTime(){
-		return time.pop();
+		return time.pop()/speed;
 	}
 }

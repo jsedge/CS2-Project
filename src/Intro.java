@@ -19,7 +19,7 @@ public class Intro extends Application {
 	private Label armWrestle,time;
 	private TextFlow layout;
 	private ProgressBar hp;
-	private boolean finalFight, gameComplete;
+	private boolean finalFight;
 	private Cthulhu highPriest;
 	private Player player;
  	public static void main(String[] args) {
@@ -110,8 +110,8 @@ public class Intro extends Application {
 					victory.setText(victory.getText() + "\nYou suddenly wake up and realize you were dreaming the entire time.");
 					victory.setText(victory.getText() + "\nYou look down to your phone and notice it's 9:47 and class already started.");
 					victory.setText(victory.getText() + "\nCthulhu laughs at you from across the table as he holds his #1 Rap Battle Master Trophy");
-					victory.setText(victory.getText() + "\nPress [ENTER] to continue");
-					gameComplete = true;
+
+
 					victory.setFont(Font.font(18));
 					layout.getChildren().add(victory);
 				}
@@ -134,18 +134,7 @@ public class Intro extends Application {
 				layout.getChildren().remove(0);
 				
 			}
-			if(gameComplete){
-				File credits = new File("credits.txt");
-				layout.getChildren().remove(0, layout.getChildren().size());
-				Scanner reader = new Scanner(credits);
-				
-				while(reader.hasNext()){
-					Text cur = new Text(reader.nextLine() + "\n\n");
-					layout.getChildren().add(cur);
-					
-					
-				}
-			}
+			
 			if(routeA.isOver()){
 				layout.getChildren().remove(0, layout.getChildren().size());
 				Text header = new Text("Rap Battle!\nYour Pride: " + player.getPride() + "\nCthluhu's Pride: " + highPriest.getPride());
@@ -181,7 +170,7 @@ public class Intro extends Application {
 					armWrestle.setVisible(true);
 				}else{
 
-					Text cthulhu = new Text("\n\nCthulhu: " + "\nYou lost " + taken + " pride\nYour remaining pride: " + player.getPride());
+					Text cthulhu = new Text("\n\nCthulhu: " + highPriest.generateBar() + "\nYou lost " + taken + " pride\nYour remaining pride: " + player.getPride());
 					cthulhu.setFont(Font.font(18));
 					layout.getChildren().add(cthulhu);
 
@@ -206,10 +195,19 @@ public class Intro extends Application {
 				if(routeB.checkProg(8)){
 					routeA.getTop();
 					routeB.getTop();
+					routeB.getTime();
+					routeA.getTime();
 				}else if(routeB.checkProg(7)){
 					player.beStrong();
 					routeA.getTop();
 					routeB.getTop();
+					routeB.getTime();
+					routeA.getTime();
+				}else if(routeB.checkProg(6)){
+					player.getConfident();
+				}else if(routeB.checkProg(5)){
+					routeA.beFast();
+					routeB.beFast();
 				}
 				
 				player.loseTime(routeB.getTime());

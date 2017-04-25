@@ -21,10 +21,14 @@ public class Player {
 	public void beStrong(){
 		strong = true;
 	}
+	
 	public boolean isStrong(){
 		return strong;
 	}
 	
+	public void getConfident(){
+		pride+=50;
+	}
 	public int getPride(){
 		return pride;
 	}
